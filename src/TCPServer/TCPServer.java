@@ -2,18 +2,45 @@ package TCPServer;
 
 import ChatExceptions.PropertyFileException;
 import PropertyFileHandler.PropertyFileHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TCPServer {
+    private static boolean needLog;
+    private static Logger logger = LogManager.getLogger();
+    public static List<Thread> serverList = new LinkedList<>();
+    public static MessagesStory story;
 
     public static void main(String[] args) throws IOException, PropertyFileException {
+        needLog = PropertyFileHandler.getInstance()
+                .getBooleanValue("LogServer");
+        story = new MessagesStory(PropertyFileHandler.getInstance()
+                .getIntegerValue("MessagesStartAmount"));
         ServerSocket serverSocket = new ServerSocket(PropertyFileHandler.getInstance()
-                .getValue("SERVER_PORT"));
+                .getIntegerValue("SERVER_PORT"));
+        if(needLog){
+            logInfo("Server started working.");
+        }
         while(true) {
             Socket clientSocket = serverSocket.accept();
+            if(needLog){
+                logInfo("Connection established with " + clientSocket.getInetAddress() + "port: " + clientSocket.getPort());
+            }
+            Thread userThread = new Thread(new RequestProcessor(clientSocket));
+            if(needLog){
+                logInfo("Server started working with user");
+            }
+            userThread.start();
         }
+    }
+
+    private static void logInfo(String info){
+        logger.info(info);
     }
 }

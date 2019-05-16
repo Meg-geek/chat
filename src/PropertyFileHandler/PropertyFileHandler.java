@@ -27,8 +27,12 @@ public class PropertyFileHandler {
         return instance;
     }
 
-    public int getValue (String propertyName) throws PropertyFileException{
+    public int getIntegerValue(String propertyName) throws PropertyFileException {
         return Integer.valueOf(getProperty(propertyName));
+    }
+
+    public boolean getBooleanValue(String propertyName) throws PropertyFileException {
+        return Boolean.valueOf(getProperty(propertyName));
     }
 
     public String getProperty(String propertyName) throws PropertyFileException{
