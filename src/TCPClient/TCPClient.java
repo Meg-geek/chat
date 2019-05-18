@@ -3,6 +3,8 @@ package TCPClient;
 import ChatExceptions.PropertyFileException;
 import PropertyFileHandler.PropertyFileHandler;
 import TCPClient.TCPClientViewSwing.ChatFrame;
+import TCPServer.Message;
+import TCPServer.MessagesStory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,21 +18,24 @@ public class TCPClient {
     private static ObjectOutputStream objectWriter;
     private static ObjectInputStream objectReader;
 
-    public static void main(String[] args) throws IOException, PropertyFileException {
+    public static void main(String[] args) throws IOException, PropertyFileException, ClassNotFoundException {
         socket = new Socket("localhost", PropertyFileHandler.getInstance()
                 .getIntegerValue("SERVER_PORT"));
         useSerializationIO();
     }
 
-    private static void useSerializationIO() throws IOException{
+    private static void useSerializationIO() throws IOException, ClassNotFoundException{
         objectWriter = new ObjectOutputStream(socket.getOutputStream());
         objectReader = new ObjectInputStream(socket.getInputStream());
         login = chatFrame.getLogin();
         if (login == null){
             closeTCPClient();
         }
+        objectWriter.writeObject(login);
+        MessagesStory story = (MessagesStory) objectReader.readObject();
+        chatFrame.showChat(story);
         while(true){
-
+            String newMessageString = chatFrame.getMessage();
         }
     }
 

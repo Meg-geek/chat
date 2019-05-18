@@ -1,5 +1,7 @@
 package TCPClient.TCPClientViewSwing;
 
+import TCPServer.MessagesStory;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,6 +15,7 @@ public class ChatFrame {
 
     private JFrame frame;
     private StartedPanel startedPanel;
+    private ChatPanel chatPanel;
 
     public ChatFrame(){
         createFrame();
@@ -43,5 +46,14 @@ public class ChatFrame {
         startedPanel = new StartedPanel();
         frame.add(startedPanel);
         frame.setVisible(true);
+    }
+
+    public String getMessage(){
+        return null;
+    }
+
+    public void showChat(MessagesStory story){
+        chatPanel = new ChatPanel(story);
+        frame.setContentPane(chatPanel);
     }
 }

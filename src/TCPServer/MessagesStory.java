@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -40,5 +41,9 @@ public class MessagesStory implements Serializable {
         for (Message message: messagesQueue){
             message.printMessage(writer);
         }
+    }
+
+    public ArrayDeque<Message> getMessagesQueue(){
+        return messagesQueue.clone();
     }
 }

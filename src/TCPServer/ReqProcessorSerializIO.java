@@ -22,6 +22,7 @@ public class ReqProcessorSerializIO extends Thread {
             objectReader = new ObjectInputStream(clientSocket.getInputStream());
             String login = (String)objectReader.readObject();
             TCPServer.registerLogin(login);
+            objectWriter.writeObject(TCPServer.story);
             while(running){
                 Message message = (Message) objectReader.readObject();
                 TCPServer.story.addMessage(message);
@@ -31,6 +32,8 @@ public class ReqProcessorSerializIO extends Thread {
             }
         } catch(IOException|ClassNotFoundException ex) {
             TCPServer.logError(ex.getMessage());
+            //?
+            running = false;
         } finally {
             try{
                 objectWriter.close();
@@ -38,8 +41,6 @@ public class ReqProcessorSerializIO extends Thread {
             } catch (IOException ex){
                 TCPServer.logError(ex.getMessage());
             }
-
-
         }
     }
 
