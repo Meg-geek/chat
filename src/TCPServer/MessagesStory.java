@@ -1,5 +1,8 @@
 package TCPServer;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.Writer;
 import java.util.ArrayDeque;
 import java.util.List;
 
@@ -8,9 +11,9 @@ import java.util.List;
  * число сообщений - параметр конструктора
  */
 
-public class MessagesStory {
+public class MessagesStory implements Serializable {
     private int maxAmount;
-    private ArrayDeque<String> messagesQueue = new ArrayDeque<>();
+    private ArrayDeque<Message> messagesQueue = new ArrayDeque<>();
 
     public MessagesStory(int maxAmount){
         this.maxAmount = maxAmount;
@@ -19,14 +22,23 @@ public class MessagesStory {
     * метод, который добавляет новое сообщение в очередь сообщений,
     * если сообщений больше нужного количества, старое сообщение удаляется
     */
-    public synchronized void addMessage(String newMessage){
+    public synchronized void addMessage(Message newMessage){
         if(maxAmount >= messagesQueue.size()){
             messagesQueue.pollFirst();
         }
         messagesQueue.addLast(newMessage);
     }
 
-    public void printMassagesList(){
+//    private void writeObject(java.io.ObjectOutputStream stream)
+//            throws IOException {
+//        for(String message: messagesQueue){
+//            stream.writeObject(message);
+//        }
+//    }
 
+    public void printMassagesList(Writer writer) throws IOException{
+        for (Message message: messagesQueue){
+            message.printMessage(writer);
+        }
     }
 }

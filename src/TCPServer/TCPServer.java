@@ -14,8 +14,9 @@ import java.util.List;
 public class TCPServer {
     private static boolean needLog;
     private static Logger logger = LogManager.getLogger();
-    public static List<Thread> serverList = new LinkedList<>();
+    public static List<ReqProcessorSerializIO> serverList = new LinkedList<>();
     public static MessagesStory story;
+    private static LinkedList<String> logins = new LinkedList<>();
 
     public static void main(String[] args) throws IOException, PropertyFileException {
         needLog = PropertyFileHandler.getInstance()
@@ -32,7 +33,8 @@ public class TCPServer {
             if(needLog){
                 logInfo("Connection established with " + clientSocket.getInetAddress() + "port: " + clientSocket.getPort());
             }
-            Thread userThread = new Thread(new RequestProcessor(clientSocket));
+            ReqProcessorSerializIO userThread = new ReqProcessorSerializIO(clientSocket);
+            serverList.add(userThread);
             if(needLog){
                 logInfo("Server started working with user");
             }
@@ -42,5 +44,13 @@ public class TCPServer {
 
     private static void logInfo(String info){
         logger.info(info);
+    }
+
+    public static void logError(String errorInfo){
+        logger.error(errorInfo);
+    }
+    //в дальнейшем переделать
+    public static void registerLogin(String login){
+        logins.add(login);
     }
 }

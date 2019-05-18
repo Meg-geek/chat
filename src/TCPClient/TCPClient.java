@@ -29,6 +29,9 @@ public class TCPClient {
         if (login == null){
             closeTCPClient();
         }
+        while(true){
+
+        }
     }
 
     private static void closeTCPClient() throws IOException{
