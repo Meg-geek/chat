@@ -2,6 +2,7 @@ package TCPClient;
 
 import ChatExceptions.PropertyFileException;
 import PropertyFileHandler.PropertyFileHandler;
+import TCPClient.TCPClientViewSwing.ChatFrame;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -10,6 +11,10 @@ import java.net.Socket;
 
 public class TCPClient {
     private static Socket socket;
+    private static ChatFrame chatFrame = new ChatFrame();
+    private static String login;
+    private static ObjectOutputStream objectWriter;
+    private static ObjectInputStream objectReader;
 
     public static void main(String[] args) throws IOException, PropertyFileException {
         socket = new Socket("localhost", PropertyFileHandler.getInstance()
@@ -18,8 +23,18 @@ public class TCPClient {
     }
 
     private static void useSerializationIO() throws IOException{
-        ObjectOutputStream objectWriter = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream());
+        objectWriter = new ObjectOutputStream(socket.getOutputStream());
+        objectReader = new ObjectInputStream(socket.getInputStream());
+        login = chatFrame.getLogin();
+        if (login == null){
+            closeTCPClient();
+        }
+    }
 
+    private static void closeTCPClient() throws IOException{
+        socket.close();
+        objectReader.close();
+        objectWriter.close();
+        System.exit(0);
     }
 }
