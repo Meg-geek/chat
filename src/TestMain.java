@@ -1,4 +1,5 @@
 import TCPClient.TCPClientViewSwing.ChatFrame;
+import TCPServer.Message;
 import TCPServer.MessagesStory;
 
 import java.io.IOException;
@@ -7,12 +8,11 @@ import java.io.ObjectOutputStream;
 public class TestMain {
     public static void main(String[] args){
 //        ChatFrame frame = new ChatFrame();
-//        String login = frame.getLogin();
-//        if (login == null){
-//            System.out.println("null");
-//        } else {
-//            System.out.println(login + login.length());
-//        }
+//        MessagesStory story = new MessagesStory(10);
+//        story.addMessage(new Message("new user", "hello"));
+//        story.addMessage(new Message("new user", "bye"));
+//        story.addMessage(new Message("new user", "что?"));
+//        frame.showChat(story);
 
 
 

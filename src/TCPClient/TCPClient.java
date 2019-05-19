@@ -17,6 +17,8 @@ public class TCPClient {
     private static String login;
     private static ObjectOutputStream objectWriter;
     private static ObjectInputStream objectReader;
+ //   private static boolean runningConnection = true;
+  //  private static Object monitor = new Object();
 
     public static void main(String[] args) throws IOException, PropertyFileException, ClassNotFoundException {
         socket = new Socket("localhost", PropertyFileHandler.getInstance()
@@ -35,8 +37,13 @@ public class TCPClient {
         MessagesStory story = (MessagesStory) objectReader.readObject();
         chatFrame.showChat(story);
         while(true){
-            String newMessageString = chatFrame.getMessage();
+            Message newMessage = (Message)objectReader.readObject();
+            if (newMessage.isExitMessage()){
+                break;
+            }
+            chatFrame.addMessage(newMessage);
         }
+        closeTCPClient();
     }
 
     private static void closeTCPClient() throws IOException{
@@ -44,5 +51,17 @@ public class TCPClient {
         objectReader.close();
         objectWriter.close();
         System.exit(0);
+    }
+
+    public static void sendMessage(String message) throws IOException{
+        if(login != null){
+            objectWriter.writeObject(new Message(login, message + System.lineSeparator()));
+        }
+    }
+
+    public static void infoException(Exception ex){}
+
+    public static void closeChat() throws IOException{
+        objectWriter.writeObject(new Message(login, "exit"));
     }
 }

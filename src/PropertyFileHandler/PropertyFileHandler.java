@@ -8,7 +8,7 @@ import java.util.Properties;
 public class PropertyFileHandler {
     private static volatile PropertyFileHandler instance;
     private Properties configFile;
-    private final static String FILE_PROPERTIES_NAME = "chatConfig.properties";
+    private final static String FILE_PROPERTIES_NAME = "/chatConfig.properties";
     private final static Object monitor = new Object();
 
     private PropertyFileHandler() throws IOException {

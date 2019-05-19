@@ -19,18 +19,18 @@ public class StartedPanel extends JPanel {
         //setLoginField();
     }
 
-    private void setLoginField(){
-        loginField.setFont(ChatFrame.infoFont);
-        loginField.setBounds(LINE_INDENT, LINE_HEIGHT*3, LOGIN_COLUMNS*ChatFrame.infoFont.getSize()/2,
-                ChatFrame.infoFont.getSize()*2);
-        this.add(loginField);
-    }
+//    private void setLoginField(){
+//        loginField.setFont(ChatFrame.infoFont);
+//        loginField.setBounds(LINE_INDENT, LINE_HEIGHT*3, LOGIN_COLUMNS*ChatFrame.infoFont.getSize()/2,
+//                ChatFrame.infoFont.getSize()*2);
+//        this.add(loginField);
+//    }
 
     @Override
     public void paint(Graphics g){
         super.paint(g);
         g.setFont(ChatFrame.infoFont);
         g.drawString("Welcome to the chat!", LINE_INDENT, LINE_HEIGHT);
-        g.drawString("Please, enter your nickname", LINE_INDENT, LINE_HEIGHT*2);
+       // g.drawString("Please, enter your nickname", LINE_INDENT, LINE_HEIGHT*2);
     }
 }

@@ -25,6 +25,9 @@ public class ReqProcessorSerializIO extends Thread {
             objectWriter.writeObject(TCPServer.story);
             while(running){
                 Message message = (Message) objectReader.readObject();
+                if (message.isExitMessage()){
+                    running = false;
+                }
                 TCPServer.story.addMessage(message);
                 for (ReqProcessorSerializIO userThread : TCPServer.serverList){
                     userThread.sendMessage(message);
@@ -38,6 +41,7 @@ public class ReqProcessorSerializIO extends Thread {
             try{
                 objectWriter.close();
                 objectReader.close();
+                TCPServer.serverList.remove(this);
             } catch (IOException ex){
                 TCPServer.logError(ex.getMessage());
             }

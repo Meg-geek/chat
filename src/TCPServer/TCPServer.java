@@ -14,7 +14,9 @@ import java.util.List;
 public class TCPServer {
     private static boolean needLog;
     private static Logger logger = LogManager.getLogger();
-    public static List<ReqProcessorSerializIO> serverList = new LinkedList<>();
+    //изменить потом
+    public static LinkedList<ReqProcessorSerializIO> serverList = new LinkedList<ReqProcessorSerializIO>();
+    //изменить
     public static MessagesStory story;
     private static LinkedList<String> logins = new LinkedList<>();
 
@@ -50,7 +52,11 @@ public class TCPServer {
         logger.error(errorInfo);
     }
     //в дальнейшем переделать
-    public static void registerLogin(String login){
+    public static void registerLogin(String login) throws IOException{
         logins.add(login);
+        synchronized (story){
+            story.addMessage(new Message("SERVER", login + " has just connected"));
+        }
     }
+
 }

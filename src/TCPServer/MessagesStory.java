@@ -24,7 +24,7 @@ public class MessagesStory implements Serializable {
     * если сообщений больше нужного количества, старое сообщение удаляется
     */
     public synchronized void addMessage(Message newMessage){
-        if(maxAmount >= messagesQueue.size()){
+        if(messagesQueue.size() >= maxAmount){
             messagesQueue.pollFirst();
         }
         messagesQueue.addLast(newMessage);
