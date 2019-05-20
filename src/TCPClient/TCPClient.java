@@ -55,7 +55,7 @@ public class TCPClient {
 
     public static void sendMessage(String message) throws IOException{
         if(login != null){
-            objectWriter.writeObject(new Message(login, message + System.lineSeparator()));
+            objectWriter.writeObject(new Message(login, message));// + System.lineSeparator()));
         }
     }
 

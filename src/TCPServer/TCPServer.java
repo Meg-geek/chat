@@ -8,16 +8,16 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class TCPServer {
     private static boolean needLog;
     private static Logger logger = LogManager.getLogger();
-    //изменить потом
-    public static LinkedList<ReqProcessorSerializIO> serverList = new LinkedList<ReqProcessorSerializIO>();
-    //изменить
-    public static MessagesStory story;
+
+    private static LinkedList<ReqProcessorSerializIO> serverList = new LinkedList<ReqProcessorSerializIO>();
+
+    private static Map loginClientSyncMap = Collections.synchronizedMap(new HashMap<Thread, String>());
+    private static MessagesStory story;
     private static LinkedList<String> logins = new LinkedList<>();
 
     public static void main(String[] args) throws IOException, PropertyFileException {
@@ -51,12 +51,35 @@ public class TCPServer {
     public static void logError(String errorInfo){
         logger.error(errorInfo);
     }
+
     //в дальнейшем переделать
-    public static void registerLogin(String login) throws IOException{
-        logins.add(login);
+    public static void registerLogin(String login, ReqProcessorSerializIO userThread){
+       // logins.add(login);
+        loginClientSyncMap.put(userThread, login);
         synchronized (story){
             story.addMessage(new Message("SERVER", login + " has just connected"));
         }
     }
 
+    public static void sendMessageToAll(Message message) throws IOException{
+        synchronized (story){
+            story.addMessage(message);
+        }
+        synchronized (serverList){
+            for (ReqProcessorSerializIO userThread : serverList){
+                userThread.sendMessage(message);
+            }
+        }
+    }
+
+    public static void removeClient(ReqProcessorSerializIO clientToRemove){
+        synchronized (serverList){
+            serverList.remove(clientToRemove);
+        }
+        loginClientSyncMap.remove(clientToRemove);
+    }
+
+    public static void sendStory(ReqProcessorSerializIO userThread) throws IOException{
+        userThread.sendStory(story);
+    }
 }

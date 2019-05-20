@@ -21,7 +21,6 @@ public class ChatPanel extends JPanel {
     private JScrollPane messagesScrollPane;
     private JTextArea messagesArea;
     private JTextArea inputArea;
-   // private Writer socketWriter;
 
     public ChatPanel(MessagesStory story){
         super();
@@ -30,7 +29,6 @@ public class ChatPanel extends JPanel {
         this.setSize(ChatFrame.FRAME_WIDTH, ChatFrame.FRAME_HEIGHT);
         this.setLayout(null);
         showStory(story);
-        //socketWriter = writer;
         addInputField();
     }
 
@@ -38,6 +36,8 @@ public class ChatPanel extends JPanel {
        messagesArea = new JTextArea();
        messagesArea.setEditable(false);
        messagesArea.setFont(ChatFrame.userFont);
+       messagesArea.setWrapStyleWord(true);
+       messagesArea.setLineWrap(true);
        for(Message message : story.getMessagesQueue()){
            messagesArea.append(message.getChatMessage() + System.lineSeparator());
        }
@@ -64,6 +64,7 @@ public class ChatPanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 String message = inputArea.getText();
+                inputArea.setText("");
                 try{
                     TCPClient.sendMessage(message);
                 } catch(IOException ex){
